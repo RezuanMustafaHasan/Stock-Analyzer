@@ -40,6 +40,10 @@ export const stockAPI = {
   health: async () => {
     const { data } = await api.get('/health');
     return data;
+  },
+  getPERatio: async (year, order = 'ASC') => {
+    const { data } = await api.get(`/stocks/pe-ratio?year=${year}&order=${order}`);
+    return data;
   }
 };
 
