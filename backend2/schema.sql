@@ -168,3 +168,23 @@ CREATE TABLE IF NOT EXISTS links (
   PRIMARY KEY (stock_id),
   FOREIGN KEY (stock_id) REFERENCES stocks(id) ON DELETE CASCADE
 );
+
+CREATE OR REPLACE VIEW latest_market_snapshot AS
+SELECT 
+    s.id AS stock_id,
+    s.company_name,
+    s.trading_code,
+    s.sector,
+    m.as_of_date,
+    m.last_trading_price,
+    m.closing_price,
+    m.change_amount,
+    m.change_percentage,
+    m.days_value,
+    m.days_volume,
+    m.market_capitalization
+FROM 
+    stocks s
+JOIN 
+    market_information m 
+    ON s.id = m.stock_id;

@@ -7,6 +7,7 @@ import { ensureSchema } from './db.js';
 import healthRoutes from './routes/health.js';
 import stockRoutes from './routes/stocks.js';
 import bulkFetchRoutes from './routes/bulkFetch.js';
+import sectorsRoutes from './routes/sectors.js'
 
 // Ensure .env values override any existing environment variables
 dotenv.config({ path: './.env', override: true });
@@ -21,6 +22,7 @@ const PORT = process.env.PORT || 5002;
 app.use('/api', healthRoutes);
 app.use('/api/stocks', stockRoutes);
 app.use('/api/stocks/bulk-fetch', bulkFetchRoutes);
+app.use('/api/sectors', sectorsRoutes);
 
 // Initialize schema and start server
 ensureSchema().then(() => {

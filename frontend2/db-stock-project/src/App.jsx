@@ -3,6 +3,7 @@ import StockViewer from './pages/StockViewer'
 import BulkFetch from './pages/BulkFetch'
 import StockDetails from './pages/StockDetails'
 import PERatio from './pages/PERatio'
+import SectorsSummary from './pages/SectorsSummary'
 import './App.css'
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
           <Link to="/stocks">Stocks</Link>
           <Link to="/bulk">Bulk Fetch</Link>
           <Link to="/pe-ratio">P/E Ratio</Link>
+          <Link to="/sectors-summary">Sectors Summary</Link>
         {/* </div> */}
       </nav>
       <main className="container classic">
@@ -22,6 +24,7 @@ function App() {
           <Route path="/stocks/:code/details" element={<StockDetails />} />
           <Route path="/bulk" element={<BulkFetch />} />
           <Route path="/pe-ratio" element={<PERatio />} />
+          <Route path="/sectors-summary" element={<SectorsSummary />} />
         </Routes>
       </main>
     </div>

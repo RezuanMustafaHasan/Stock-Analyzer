@@ -35,7 +35,7 @@ export const stockAPI = {
   },
   refreshStockData: async (tradingCode) => {
     const { data } = await api.post(`/stocks/refresh/${tradingCode}`);
-    return data;
+      return data;
   },
   health: async () => {
     const { data } = await api.get('/health');
@@ -43,6 +43,10 @@ export const stockAPI = {
   },
   getPERatio: async (year, order = 'ASC') => {
     const { data } = await api.get(`/stocks/pe-ratio?year=${year}&order=${order}`);
+    return data;
+  },
+  getSectorsSummary: async () => {
+    const { data } = await api.get('/sectors/summary');
     return data;
   }
 };
