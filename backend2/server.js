@@ -8,6 +8,7 @@ import healthRoutes from './routes/health.js';
 import stockRoutes from './routes/stocks.js';
 import bulkFetchRoutes from './routes/bulkFetch.js';
 import sectorsRoutes from './routes/sectors.js'
+import marketRoutes from './routes/market.js'
 
 // Ensure .env values override any existing environment variables
 dotenv.config({ path: './.env', override: true });
@@ -23,6 +24,7 @@ app.use('/api', healthRoutes);
 app.use('/api/stocks', stockRoutes);
 app.use('/api/stocks/bulk-fetch', bulkFetchRoutes);
 app.use('/api/sectors', sectorsRoutes);
+app.use('/api/market', marketRoutes);
 
 // Initialize schema and start server
 ensureSchema().then(() => {

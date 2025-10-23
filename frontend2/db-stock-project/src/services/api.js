@@ -48,6 +48,11 @@ export const stockAPI = {
   getSectorsSummary: async () => {
     const { data } = await api.get('/sectors/summary');
     return data;
+  },
+  getMarketSnapshot: async (q = '') => {
+    const qs = q ? `?q=${encodeURIComponent(q)}` : '';
+    const { data } = await api.get(`/market/snapshot${qs}`);
+    return data;
   }
 };
 

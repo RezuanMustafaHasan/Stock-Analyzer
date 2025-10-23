@@ -169,22 +169,17 @@ CREATE TABLE IF NOT EXISTS links (
   FOREIGN KEY (stock_id) REFERENCES stocks(id) ON DELETE CASCADE
 );
 
+-- View: latest market snapshot of joined stock and market info
 CREATE OR REPLACE VIEW latest_market_snapshot AS
-SELECT 
-    s.id AS stock_id,
-    s.company_name,
-    s.trading_code,
-    s.sector,
-    m.as_of_date,
-    m.last_trading_price,
-    m.closing_price,
-    m.change_amount,
-    m.change_percentage,
-    m.days_value,
-    m.days_volume,
-    m.market_capitalization
-FROM 
-    stocks s
-JOIN 
-    market_information m 
-    ON s.id = m.stock_id;
+SELECT
+  s.trading_code,
+  s.company_name,
+  s.sector,
+  m.last_trading_price AS last_price,
+  m.change_percentage,
+  m.days_volume AS volume,
+  m.market_capitalization AS market_cap
+FROM stocks s
+LEFT JOIN market_information m ON m.stock_id = s.id;
+
+-- latest_market_snapshot view defined above
