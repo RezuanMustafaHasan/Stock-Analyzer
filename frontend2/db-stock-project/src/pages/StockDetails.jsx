@@ -44,7 +44,7 @@ export default function StockDetails() {
       <div className="heading-bar top"><h2>Stock Details</h2></div>
       <div className="controls">
         <Link to="/stocks" className="btn-link">← Back to Stocks</Link>
-        <button onClick={() => navigate(`/stocks/${code}`)}>Legacy View</button>
+        {/* <button onClick={() => navigate(`/stocks/${code}`)}>Legacy View</button> */}
       </div>
       {loading && <p className="muted" style={{ textAlign: 'center' }}>Loading {code}…</p>}
       {error && <p className="error" style={{ textAlign: 'center' }}>{error}</p>}
@@ -185,7 +185,7 @@ export default function StockDetails() {
             </section>
           )}
 
-          {stock.corporateInformation && (
+          {/* {stock.corporateInformation && (
             <section className="section" id="corporate">
               <div className="heading-bar"><h4>Corporate Information</h4></div>
               <div className="card">
@@ -207,9 +207,9 @@ export default function StockDetails() {
                 ) : null}
               </div>
             </section>
-          )}
+          )} */}
 
-          {stock.links && (
+          {/* {stock.links && (
             <section className="section" id="links">
               <div className="heading-bar"><h4>Links</h4></div>
               <div className="card">
@@ -219,7 +219,7 @@ export default function StockDetails() {
                 </ul>
               </div>
             </section>
-          )}
+          )} */}
         </div>
       )}
     </div>

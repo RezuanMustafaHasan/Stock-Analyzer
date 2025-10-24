@@ -26,6 +26,44 @@ body {
   width: 100%;
 }
 
+/* Global button styles */
+button {
+  padding: 10px 16px;
+  border: 1px solid #075662;
+  background: #075662;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+  background: #054450;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(7, 86, 98, 0.3);
+}
+
+input, select {
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: #075662;
+  box-shadow: 0 0 0 2px rgba(7, 86, 98, 0.1);
+}
+
 .app {
   display: flex;
   flex-direction: column;
@@ -205,8 +243,8 @@ body {
 
 .controls button { 
   padding: 10px 16px; 
-  border: 1px solid var(--primary); 
-  background: var(--primary); 
+  border: 1px solid #075662; 
+  background: #075662; 
   color: white; 
   border-radius: 6px; 
   cursor: pointer;
@@ -221,9 +259,9 @@ body {
 }
 
 .controls button:hover:not(:disabled) { 
-  background: var(--primary-dark);
+  background: #054450;
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(11, 114, 133, 0.3);
+  box-shadow: 0 2px 8px rgba(7, 86, 98, 0.3);
 }
 
 /* Table */
@@ -485,6 +523,7 @@ body {
   padding: 10px 16px; 
   border: 1px solid var(--primary); 
   background: var(--primary); 
+  background-color: #075662;
   color: white; 
   border-radius: 6px; 
   cursor: pointer;
@@ -683,5 +722,5 @@ body {
 .input { width: 100%; border: 1px solid var(--border); border-radius: 6px; padding: 8px 10px; font-size: 14px; box-sizing: border-box; }
 .checkbox-item { display: flex; align-items: center; gap: 8px; padding: 4px 2px; }
 .chip { display: inline-flex; align-items: center; padding: 4px 8px; border-radius: 12px; background: var(--row-highlight); border: 1px solid var(--border); font-size: 12px; }
-.btn.primary { padding: 10px 16px; border: 1px solid var(--primary); background: var(--primary); color: #fff; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s ease; }
-.btn.primary:hover { background: var(--primary-dark); }
+.btn.primary { padding: 10px 16px; border: 1px solid #075662; background: #075662; color: #fff; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s ease; }
+.btn.primary:hover { background: #054450; }

@@ -27,10 +27,10 @@ export default function SectorsSummary() {
   }, []);
 
   const totals = useMemo(() => {
-    const totalAuthorized = rows.reduce((acc, r) => acc + (r.totalAuthorizedCapital || 0), 0);
+    const totalMarketCap = rows.reduce((acc, r) => acc + (r.totalMarketCapital || 0), 0);
     return {
       totalSectors: rows.length,
-      totalAuthorizedBillion: totalAuthorized / 1_000_000_000
+      totalMarketCapBillion: totalMarketCap / 1_000_000_000
     };
   }, [rows]);
 
@@ -80,7 +80,7 @@ export default function SectorsSummary() {
           <>
             <div style={{ display: 'flex', gap: '20px', marginBottom: '15px', flexWrap: 'wrap' }}>
               <div><strong>Total sectors:</strong> {totals.totalSectors}</div>
-              <div><strong>Total authorized capital (bn):</strong> {fmtNum(totals.totalAuthorizedBillion)}</div>
+              <div><strong>Total market capital (bn):</strong> {fmtNum(totals.totalMarketCapBillion)}</div>
             </div>
 
             <div className="table-wrapper">
@@ -92,8 +92,8 @@ export default function SectorsSummary() {
                     <th style={{ textAlign: 'right', cursor: 'pointer' }} onClick={() => toggleSort('totalVolume')}>Total Volume</th>
                     <th style={{ textAlign: 'right', cursor: 'pointer' }} onClick={() => toggleSort('gainers')}>No. of Gainer</th>
                     <th style={{ textAlign: 'right', cursor: 'pointer' }} onClick={() => toggleSort('losers')}>No. of Looser</th>
-                    <th style={{ textAlign: 'right', cursor: 'pointer' }} onClick={() => toggleSort('totalAuthorizedCapital')}>Total Authorized capital</th>
-                    <th style={{ textAlign: 'right', cursor: 'pointer' }} onClick={() => toggleSort('authorizedCapitalPct')}>Authorized capital in %</th>
+                    <th style={{ textAlign: 'right', cursor: 'pointer' }} onClick={() => toggleSort('totalMarketCapital')}>Total Market Capital (bn)</th>
+                    <th style={{ textAlign: 'right', cursor: 'pointer' }} onClick={() => toggleSort('marketCapitalPct')}>Market Capital in %</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -104,8 +104,8 @@ export default function SectorsSummary() {
                       <td style={{ textAlign: 'right' }}>{fmtNum(r.totalVolume, 0)}</td>
                       <td style={{ textAlign: 'right' }}>{fmtNum(r.gainers, 0)}</td>
                       <td style={{ textAlign: 'right' }}>{fmtNum(r.losers, 0)}</td>
-                      <td style={{ textAlign: 'right' }}>{fmtNum(r.totalAuthorizedCapital)}</td>
-                      <td style={{ textAlign: 'right' }}>{fmtNum(r.authorizedCapitalPct)}</td>
+                      <td style={{ textAlign: 'right' }}>{fmtNum((r.totalMarketCapital || 0) / 1_000_000_000)}</td>
+                      <td style={{ textAlign: 'right' }}>{fmtNum(r.marketCapitalPct)}</td>
                     </tr>
                   ))}
                 </tbody>

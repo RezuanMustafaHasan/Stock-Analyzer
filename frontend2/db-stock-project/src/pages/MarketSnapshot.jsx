@@ -86,28 +86,36 @@ export default function MarketSnapshot() {
             flexWrap: 'wrap'
           }}>
             <div style={{ flex: '1', minWidth: '250px' }}>
-              <label htmlFor="search" style={{ 
-                display: 'block', 
-                marginBottom: '5px', 
-                fontWeight: '600', 
-                fontSize: '14px'
-              }}>
-                Search
-              </label>
-              <input
-                id="search"
-                type="text"
-                placeholder="Company or Trading Code"
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-              />
-            </div>
+            {/* <label htmlFor="search" style={{ 
+              display: 'block', 
+              marginBottom: '5px', 
+              fontWeight: '600', 
+              fontSize: '14px'
+            }}>
+              Search
+            </label> */}
+            <input
+              id="search"
+              type="text"
+              placeholder="Company or Trading Code"
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              style={{
+                width: '20%',
+                padding: '8px',
+                fontSize: '14px',
+                border: '1px solid #ccc',
+                borderRadius: '4px'
+              }}
+            />
             <button 
               type="submit" 
               disabled={loading}
+              style={{ marginLeft: '8px' }}
             >
               {loading ? 'Searching...' : 'Search'}
             </button>
+            </div>
           </div>
         </form>
 
