@@ -53,6 +53,26 @@ export const stockAPI = {
     const qs = q ? `?q=${encodeURIComponent(q)}` : '';
     const { data } = await api.get(`/market/snapshot${qs}`);
     return data;
+  },
+  getFilteredStocks: async (options = {}) => {
+    const params = new URLSearchParams();
+    if (options.sector) params.append('sector', options.sector);
+    if (options.pe_min != null && options.pe_min !== '') params.append('pe_min', options.pe_min);
+    if (options.pe_max != null && options.pe_max !== '') params.append('pe_max', options.pe_max);
+    if (options.market_cap_min != null && options.market_cap_min !== '') params.append('market_cap_min', options.market_cap_min);
+    if (options.dividend_min != null && options.dividend_min !== '') params.append('dividend_min', options.dividend_min);
+
+    const qs = params.toString() ? `?${params.toString()}` : '';
+    const { data } = await api.get(`/stocks/filter${qs}`);
+    return data;
+  },
+  postFilteredStocks: async (options = {}) => {
+    const { data } = await api.post('/stocks/filter', options);
+    return data;
+  },
+  postTopMovers: async ({ top = 10, order = 'DESC' } = {}) => {
+    const { data } = await api.post('/market/top-movers', { top, order });
+    return data;
   }
 };
 

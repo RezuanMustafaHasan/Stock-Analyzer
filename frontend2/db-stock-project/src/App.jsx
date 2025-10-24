@@ -5,6 +5,8 @@ import StockDetails from './pages/StockDetails'
 import PERatio from './pages/PERatio'
 import SectorsSummary from './pages/SectorsSummary'
 import MarketSnapshot from './pages/MarketSnapshot'
+import StockScreenerPage from './pages/StockScreenerPage'
+import TopMovers from './pages/TopMovers'
 import './App.css'
 
 function App() {
@@ -17,6 +19,8 @@ function App() {
           <Link to="/pe-ratio">P/E Ratio</Link>
           <Link to="/sectors-summary">Sectors Summary</Link>
           <Link to="/market-snapshot">Market Snapshot</Link>
+          <Link to="/stock-screener">Stock Screener</Link>
+          <Link to="/top-movers">Top Movers</Link>
         {/* </div> */}
       </nav>
       <main className="container classic">
@@ -28,6 +32,8 @@ function App() {
           <Route path="/pe-ratio" element={<PERatio />} />
           <Route path="/sectors-summary" element={<SectorsSummary />} />
           <Route path="/market-snapshot" element={<MarketSnapshot />} />
+          <Route path="/stock-screener" element={<StockScreenerPage />} />
+          <Route path="/top-movers" element={<TopMovers />} />
         </Routes>
       </main>
     </div>

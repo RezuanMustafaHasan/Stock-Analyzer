@@ -63,7 +63,7 @@ body {
 
 /* Main container with proper centering */
 .container.classic { 
-  max-width: 1200px; 
+  max-width: 1400px; 
   width: 100%;
   margin: 84px auto 0 auto; 
   padding: 24px;
@@ -674,3 +674,14 @@ body {
   color: var(--primary-dark);
   text-decoration: underline;
 }
+
+/* Form layout helpers for FilterPanel */
+.form-grid { display: grid; gap: 16px; align-items: start; }
+.form-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px; }
+.form-row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+.radio-row { display: flex; gap: 12px; align-items: center; }
+.input { width: 100%; border: 1px solid var(--border); border-radius: 6px; padding: 8px 10px; font-size: 14px; box-sizing: border-box; }
+.checkbox-item { display: flex; align-items: center; gap: 8px; padding: 4px 2px; }
+.chip { display: inline-flex; align-items: center; padding: 4px 8px; border-radius: 12px; background: var(--row-highlight); border: 1px solid var(--border); font-size: 12px; }
+.btn.primary { padding: 10px 16px; border: 1px solid var(--primary); background: var(--primary); color: #fff; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s ease; }
+.btn.primary:hover { background: var(--primary-dark); }

@@ -6,6 +6,7 @@ import {
   refreshStockData,
   getPERatio
 } from '../controllers/stockController.js';
+import { getFilteredStocks } from '../controllers/stockFilterController.js';
 
 const router = express.Router();
 
@@ -14,6 +15,10 @@ router.get('/', listStocks);
 
 // PE Ratio - must come before /:tradingCode
 router.get('/pe-ratio', getPERatio);
+
+// Filter stocks using v_stock_financials
+router.get('/filter', getFilteredStocks);
+router.post('/filter', getFilteredStocks);
 
 // Fetch and store stock data
 router.post('/fetch', fetchStockData);

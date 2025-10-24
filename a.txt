@@ -167,3 +167,8 @@ CREATE TABLE IF NOT EXISTS links (
   PRIMARY KEY (stock_id),
   FOREIGN KEY (stock_id) REFERENCES stocks(id) ON DELETE CASCADE
 );
+
+
+
+
+

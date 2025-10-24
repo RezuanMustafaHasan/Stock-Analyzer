@@ -183,3 +183,40 @@ FROM stocks s
 LEFT JOIN market_information m ON m.stock_id = s.id;
 
 -- latest_market_snapshot view defined above
+
+-- View: v_stock_financials combining stock basic, market info, and latest EPS/dividend
+CREATE OR REPLACE VIEW v_stock_financials AS
+SELECT 
+    s.id,
+    s.company_name,
+    s.trading_code,
+    s.sector,
+    mi.closing_price,
+    mi.change_percentage,
+    mi.days_volume,
+    mi.market_capitalization,
+    bi.market_category,
+    bi.face_value,
+    bi.listing_year,
+    -- Latest EPS
+    (
+      SELECT ae.eps 
+      FROM audited_eps ae 
+      WHERE ae.stock_id = s.id 
+      ORDER BY ae.year DESC 
+      LIMIT 1
+    ) AS latest_eps,
+    -- Latest cash dividend percentage
+    (
+      SELECT cd.percentage 
+      FROM cash_dividends cd 
+      WHERE cd.stock_id = s.id 
+      ORDER BY cd.year DESC 
+      LIMIT 1
+    ) AS latest_dividend_percentage
+FROM 
+    stocks s
+JOIN 
+    market_information mi ON s.id = mi.stock_id
+JOIN 
+    basic_information bi ON s.id = bi.stock_id;
