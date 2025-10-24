@@ -63,15 +63,6 @@ CREATE TABLE IF NOT EXISTS interim_eps (
   FOREIGN KEY (stock_id) REFERENCES stocks(id) ON DELETE CASCADE
 );
 
--- Financial performance: period end market price (1:N)
-CREATE TABLE IF NOT EXISTS period_end_market_price (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  stock_id INT NOT NULL,
-  period VARCHAR(64) NOT NULL,
-  price DECIMAL(12,4) NOT NULL,
-  FOREIGN KEY (stock_id) REFERENCES stocks(id) ON DELETE CASCADE
-);
-
 -- Financial performance: audited EPS (1:N)
 CREATE TABLE IF NOT EXISTS audited_eps (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -138,37 +129,6 @@ CREATE TABLE IF NOT EXISTS shareholding (
   public DECIMAL(9,4) NOT NULL,
   FOREIGN KEY (stock_id) REFERENCES stocks(id) ON DELETE CASCADE
 );
-
--- Corporate information (1:1 plus phone list)
-CREATE TABLE IF NOT EXISTS corporate_information (
-  stock_id INT NOT NULL,
-  address TEXT NOT NULL,
-  email VARCHAR(255) NOT NULL,
-  website VARCHAR(255) NOT NULL,
-  company_secretary_name VARCHAR(255) NOT NULL,
-  company_secretary_cell VARCHAR(64) NOT NULL,
-  company_secretary_telephone VARCHAR(64) NOT NULL,
-  company_secretary_email VARCHAR(255) NOT NULL,
-  PRIMARY KEY (stock_id),
-  FOREIGN KEY (stock_id) REFERENCES stocks(id) ON DELETE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS corporate_phone (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  stock_id INT NOT NULL,
-  phone VARCHAR(64) NOT NULL,
-  FOREIGN KEY (stock_id) REFERENCES stocks(id) ON DELETE CASCADE
-);
-
--- Links (1:1)
-CREATE TABLE IF NOT EXISTS links (
-  stock_id INT NOT NULL,
-  financial_statements VARCHAR(1024),
-  price_sensitive_information VARCHAR(1024),
-  PRIMARY KEY (stock_id),
-  FOREIGN KEY (stock_id) REFERENCES stocks(id) ON DELETE CASCADE
-);
-
 -- View: latest market snapshot of joined stock and market info
 CREATE OR REPLACE VIEW latest_market_snapshot AS
 SELECT

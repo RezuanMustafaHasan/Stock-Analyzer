@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { stockAPI } from '../services/api';
 
 export default function MarketSnapshot() {
+  const navigate = useNavigate();
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -65,6 +67,10 @@ export default function MarketSnapshot() {
     fetchData(q);
   };
 
+  const handleRowClick = (tradingCode) => {
+    navigate(`/stocks/${tradingCode}/details`);
+  };
+
   return (
     <>
       <div className="heading-bar top">
@@ -72,19 +78,37 @@ export default function MarketSnapshot() {
       </div>
 
       <div className="card">
-        <form onSubmit={handleSearch} style={{ display: 'flex', gap: '10px', alignItems: 'flex-end', flexWrap: 'wrap', marginBottom: '15px' }}>
-          <div>
-            <label htmlFor="search" style={{ display: 'block', marginBottom: '5px', fontWeight: '600', fontSize: '14px' }}>Search</label>
-            <input
-              id="search"
-              type="text"
-              placeholder="Company or Trading Code"
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              onKeyDown={(e) => { if (e.key === 'Enter') handleSearch(e); }}
-            />
+        <form onSubmit={handleSearch} style={{ marginBottom: '20px' }}>
+          <div style={{ 
+            display: 'flex', 
+            gap: '10px', 
+            alignItems: 'flex-end', 
+            flexWrap: 'wrap'
+          }}>
+            <div style={{ flex: '1', minWidth: '250px' }}>
+              <label htmlFor="search" style={{ 
+                display: 'block', 
+                marginBottom: '5px', 
+                fontWeight: '600', 
+                fontSize: '14px'
+              }}>
+                Search
+              </label>
+              <input
+                id="search"
+                type="text"
+                placeholder="Company or Trading Code"
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+              />
+            </div>
+            <button 
+              type="submit" 
+              disabled={loading}
+            >
+              {loading ? 'Searching...' : 'Search'}
+            </button>
           </div>
-          <button type="submit" disabled={loading}>{loading ? 'Searching...' : 'Search'}</button>
         </form>
 
         {error && <p className="error" style={{ textAlign: 'center' }}>{error}</p>}
@@ -106,7 +130,16 @@ export default function MarketSnapshot() {
               {sortedRows.map((r) => {
                 const changeColor = r.change_percentage > 0 ? 'green' : r.change_percentage < 0 ? 'red' : undefined;
                 return (
-                  <tr key={r.trading_code}>
+                  <tr 
+                    key={r.trading_code}
+                    onClick={() => handleRowClick(r.trading_code)}
+                    style={{ 
+                      cursor: 'pointer',
+                      transition: 'background-color 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => e.target.closest('tr').style.backgroundColor = '#f8f9fa'}
+                    onMouseLeave={(e) => e.target.closest('tr').style.backgroundColor = 'transparent'}
+                  >
                     <td><strong>{r.trading_code}</strong></td>
                     <td>{r.company_name}</td>
                     <td>{r.sector}</td>

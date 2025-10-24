@@ -21,7 +21,11 @@ export default function StockScreenerPage() {
     foreign_min: '',
     foreign_max: '',
     public_min: '',
-    public_max: ''
+    public_max: '',
+    short_term_loan_min: '',
+    short_term_loan_max: '',
+    long_term_loan_min: '',
+    long_term_loan_max: ''
   });
 
   const [stockResults, setStockResults] = useState([]);

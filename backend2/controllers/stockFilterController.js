@@ -24,7 +24,12 @@ export async function getFilteredStocks(req, res) {
       foreign_min,
       foreign_max,
       public_min,
-      public_max
+      public_max,
+      // Loan filters
+      short_term_loan_min,
+      short_term_loan_max,
+      long_term_loan_min,
+      long_term_loan_max
     } = source;
 
     let sql = `
@@ -41,8 +46,11 @@ export async function getFilteredStocks(req, res) {
         (SELECT sh.government FROM shareholding sh WHERE sh.stock_id = v.id ORDER BY sh.as_on DESC LIMIT 1) AS sh_government,
         (SELECT sh.institute FROM shareholding sh WHERE sh.stock_id = v.id ORDER BY sh.as_on DESC LIMIT 1) AS sh_institute,
         (SELECT sh.foreign_share FROM shareholding sh WHERE sh.stock_id = v.id ORDER BY sh.as_on DESC LIMIT 1) AS sh_foreign_share,
-        (SELECT sh.public FROM shareholding sh WHERE sh.stock_id = v.id ORDER BY sh.as_on DESC LIMIT 1) AS sh_public
+        (SELECT sh.public FROM shareholding sh WHERE sh.stock_id = v.id ORDER BY sh.as_on DESC LIMIT 1) AS sh_public,
+        fh.short_term_loan AS short_term_loan,
+        fh.long_term_loan AS long_term_loan
       FROM v_stock_financials v
+      LEFT JOIN financial_highlights fh ON fh.stock_id = v.id
       WHERE 1=1
     `;
 
@@ -66,6 +74,24 @@ export async function getFilteredStocks(req, res) {
     if (market_cap_min != null && market_cap_min !== '' && !Number.isNaN(Number(market_cap_min))) {
       sql += ` AND v.market_capitalization >= ?`;
       params.push(Number(market_cap_min));
+    }
+
+    // Loan filters (on base columns)
+    if (short_term_loan_min != null && short_term_loan_min !== '' && !Number.isNaN(Number(short_term_loan_min))) {
+      sql += ` AND fh.short_term_loan >= ?`;
+      params.push(Number(short_term_loan_min));
+    }
+    if (short_term_loan_max != null && short_term_loan_max !== '' && !Number.isNaN(Number(short_term_loan_max))) {
+      sql += ` AND fh.short_term_loan <= ?`;
+      params.push(Number(short_term_loan_max));
+    }
+    if (long_term_loan_min != null && long_term_loan_min !== '' && !Number.isNaN(Number(long_term_loan_min))) {
+      sql += ` AND fh.long_term_loan >= ?`;
+      params.push(Number(long_term_loan_min));
+    }
+    if (long_term_loan_max != null && long_term_loan_max !== '' && !Number.isNaN(Number(long_term_loan_max))) {
+      sql += ` AND fh.long_term_loan <= ?`;
+      params.push(Number(long_term_loan_max));
     }
 
     // HAVING filters for computed fields and latest shareholding aliases
@@ -142,6 +168,8 @@ export async function getFilteredStocks(req, res) {
       market_capitalization: r.market_capitalization !== null ? Number(r.market_capitalization) : null,
       pe_ratio: r.pe_ratio !== null ? Number(r.pe_ratio) : null,
       dividend_yield: r.dividend_yield !== null ? Number(r.dividend_yield) : null,
+      short_term_loan: r.short_term_loan !== null ? Number(r.short_term_loan) : null,
+      long_term_loan: r.long_term_loan !== null ? Number(r.long_term_loan) : null,
       shareholding: {
         sponsor_director: r.sh_sponsor_director !== null ? Number(r.sh_sponsor_director) : null,
         government: r.sh_government !== null ? Number(r.sh_government) : null,

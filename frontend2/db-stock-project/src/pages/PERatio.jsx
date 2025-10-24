@@ -77,9 +77,22 @@ export default function PERatio() {
       </div>
 
       <div className="card">
-        <div className="controls">
+        <div style={{ 
+          display: 'flex', 
+          gap: '20px', 
+          alignItems: 'flex-end', 
+          flexWrap: 'wrap', 
+          marginBottom: '20px',
+          padding: '10px 0'
+        }}>
           <div>
-            <label htmlFor="year" style={{ display: 'block', marginBottom: '5px', fontWeight: '600', fontSize: '14px' }}>
+            <label htmlFor="year" style={{ 
+              display: 'block', 
+              marginBottom: '8px', 
+              fontWeight: '600', 
+              fontSize: '14px',
+              color: '#333'
+            }}>
               Year
             </label>
             <input
@@ -89,28 +102,71 @@ export default function PERatio() {
               onChange={(e) => setYear(e.target.value)}
               placeholder="e.g., 2024"
               onKeyPress={(e) => e.key === 'Enter' && handleExecute()}
+              style={{
+                padding: '10px 12px',
+                border: '1px solid #ddd',
+                borderRadius: '6px',
+                fontSize: '14px',
+                width: '120px',
+                outline: 'none'
+              }}
+              onFocus={(e) => e.target.style.borderColor = '#007bff'}
+              onBlur={(e) => e.target.style.borderColor = '#ddd'}
             />
           </div>
 
           <div>
-            <label htmlFor="order" style={{ display: 'block', marginBottom: '5px', fontWeight: '600', fontSize: '14px' }}>
+            <label htmlFor="order" style={{ 
+              display: 'block', 
+              marginBottom: '8px', 
+              fontWeight: '600', 
+              fontSize: '14px',
+              color: '#333'
+            }}>
               Sort Order
             </label>
             <select
               id="order"
               value={order}
               onChange={(e) => setOrder(e.target.value)}
+              style={{
+                padding: '10px 12px',
+                border: '1px solid #ddd',
+                borderRadius: '6px',
+                fontSize: '14px',
+                backgroundColor: 'white',
+                cursor: 'pointer',
+                outline: 'none',
+                minWidth: '140px'
+              }}
+              onFocus={(e) => e.target.style.borderColor = '#007bff'}
+              onBlur={(e) => e.target.style.borderColor = '#ddd'}
             >
               <option value="ASC">Ascending</option>
               <option value="DESC">Descending</option>
             </select>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-            <button onClick={handleExecute} disabled={loading}>
-              {loading ? 'Loading...' : 'Execute'}
-            </button>
-          </div>
+          <button 
+            onClick={handleExecute} 
+            disabled={loading}
+            style={{
+              padding: '10px 20px',
+              backgroundColor: loading ? '#ccc' : '#007bff',
+              color: 'white',
+              border: 'none',
+              borderRadius: '6px',
+              fontSize: '14px',
+              fontWeight: '600',
+              cursor: loading ? 'not-allowed' : 'pointer',
+              transition: 'background-color 0.2s ease',
+              minWidth: '100px'
+            }}
+            onMouseEnter={(e) => !loading && (e.target.style.backgroundColor = '#0056b3')}
+            onMouseLeave={(e) => !loading && (e.target.style.backgroundColor = '#007bff')}
+          >
+            {loading ? 'Loading...' : 'Execute'}
+          </button>
         </div>
 
         {error && <p className="error" style={{ textAlign: 'center' }}>{error}</p>}
@@ -132,12 +188,20 @@ export default function PERatio() {
                     <th style={{ textAlign: 'right' }}>P/E Ratio</th>
                     <th style={{ textAlign: 'right' }}>Cash Dividend %</th>
                     <th style={{ textAlign: 'right' }}>Bonus Issue %</th>
-                    <th style={{ textAlign: 'center' }}>Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   {currentStocks.map((stock) => (
-                    <tr key={stock.trading_code}>
+                    <tr 
+                      key={stock.trading_code}
+                      onClick={() => handleViewDetails(stock.trading_code)}
+                      style={{ 
+                        cursor: 'pointer',
+                        transition: 'background-color 0.2s ease'
+                      }}
+                      onMouseEnter={(e) => e.target.closest('tr').style.backgroundColor = '#f8f9fa'}
+                      onMouseLeave={(e) => e.target.closest('tr').style.backgroundColor = 'transparent'}
+                    >
                       <td><strong>{stock.trading_code}</strong></td>
                       <td>{stock.company_name}</td>
                       <td style={{ textAlign: 'right' }}>{fmtNum(stock.ltp)}</td>
@@ -147,11 +211,6 @@ export default function PERatio() {
                       </td>
                       <td style={{ textAlign: 'right' }}>{fmtNum(stock.cash_dividend)}</td>
                       <td style={{ textAlign: 'right' }}>{fmtNum(stock.bonus_issue)}</td>
-                      <td style={{ textAlign: 'center' }}>
-                        <button onClick={() => handleViewDetails(stock.trading_code)}>
-                          View Details
-                        </button>
-                      </td>
                     </tr>
                   ))}
                 </tbody>

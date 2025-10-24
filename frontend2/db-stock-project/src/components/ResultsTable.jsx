@@ -1,9 +1,16 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function ResultsTable({ stockResults }) {
+  const navigate = useNavigate();
+
   const formatNumber = (n, digits = 2) => {
     if (n == null || Number.isNaN(Number(n))) return '-';
     return Number(n).toFixed(digits);
+  };
+
+  const handleRowClick = (tradingCode) => {
+    navigate(`/stocks/${tradingCode}/details`);
   };
 
   return (
@@ -22,7 +29,16 @@ export default function ResultsTable({ stockResults }) {
         <tbody>
           {Array.isArray(stockResults) && stockResults.length > 0 ? (
             stockResults.map((r) => (
-              <tr key={r.trading_code}>
+              <tr 
+                key={r.trading_code}
+                onClick={() => handleRowClick(r.trading_code)}
+                style={{ 
+                  cursor: 'pointer',
+                  transition: 'background-color 0.2s ease'
+                }}
+                onMouseEnter={(e) => e.target.closest('tr').style.backgroundColor = '#f5f5f5'}
+                onMouseLeave={(e) => e.target.closest('tr').style.backgroundColor = 'transparent'}
+              >
                 <td>{r.trading_code}</td>
                 <td>{r.company_name}</td>
                 <td>{r.sector}</td>
