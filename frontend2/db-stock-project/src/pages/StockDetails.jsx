@@ -5,56 +5,72 @@ import CorporateActions from '../components/CorporateActions';
 import FinancialHighlights from '../components/FinancialHighlights';
 import Shareholding from '../components/Shareholding';
 
-const fmtDate = (d) => {
-  if (!d) return '-';
-  const dd = typeof d === 'string' ? new Date(d) : d;
-  if (Number.isNaN(dd.getTime())) return d;
-  return dd.toISOString().slice(0, 10);
-};
-const fmtNum = (n) => {
-  if (n === null || n === undefined || n === '') return '-';
-  const v = typeof n === 'string' ? parseFloat(n) : n;
-  if (Number.isNaN(v)) return n;
-  return new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(v);
-};
-
 export default function StockDetails() {
-  const { code: paramCode } = useParams();
+  const { code } = useParams();
   const navigate = useNavigate();
-  const [code] = useState((paramCode || 'SIBL').toUpperCase());
   const [stock, setStock] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState('');
+
+  const fmtNum = (n) => {
+    if (n === null || n === undefined || n === '') return '-';
+    const v = typeof n === 'string' ? parseFloat(n) : n;
+    if (Number.isNaN(v)) return n;
+    return new Intl.NumberFormat('en-US', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(v);
+  };
+  const fmtDate = (d) => {
+    if (!d) return '-';
+    const dt = new Date(d);
+    if (isNaN(dt.getTime())) return d;
+    return dt.toLocaleDateString('en-GB');
+  };
 
   useEffect(() => {
     const load = async () => {
-      setError(null);
       setLoading(true);
+      setError('');
       try {
         const data = await stockAPI.getStockByCode(code);
         setStock(data);
-      } catch (e) { setError(e.message); }
-      finally { setLoading(false); }
+      } catch (e) {
+        console.error('Failed to load stock', e);
+        setError(e.response?.data?.message || e.message || 'Failed to load stock');
+        setStock(null);
+      } finally {
+        setLoading(false);
+      }
     };
     load();
   }, [code]);
 
+  const fmtPlainYear = (y) => {
+    if (y === null || y === undefined || y === '') return '-';
+    const num = Number(y);
+    return Number.isFinite(num) ? String(num) : String(y);
+  };
+
+  const fmtDateOrDash = (d) => (d ? fmtDate(d) : '-');
+
+  const fmtDateRange = (r) => {
+    const low = r?.low ?? null;
+    const high = r?.high ?? null;
+    return `${fmtNum(low)} - ${fmtNum(high)}`;
+  };
+
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', width: '100%' }}>
-      <div className="heading-bar top"><h2>Stock Details</h2></div>
-      <div className="controls">
-        <Link to="/stocks" className="btn-link">← Back to Stocks</Link>
-        {/* <button onClick={() => navigate(`/stocks/${code}`)}>Legacy View</button> */}
+    <div className="page">
+      <div className="heading-bar top">
+        <Link to="/stocks" className="muted">← Back</Link>
       </div>
-      {loading && <p className="muted" style={{ textAlign: 'center' }}>Loading {code}…</p>}
+
       {error && <p className="error" style={{ textAlign: 'center' }}>{error}</p>}
+
       {stock && (
-        <div className="card" style={{ marginTop: 12 }}>
+        <div>
           <div className="heading-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', flexWrap: 'wrap', gap: '12px' }}>
-            <h3 style={{ margin: 0 }}>{stock.companyName} ({stock.tradingCode})</h3>
+            <h2 style={{ margin: 0 }}>{stock.companyName} ({stock.tradingCode})</h2>
             <span className="muted">Sector: {stock.sector}</span>
           </div>
-
           <div className="subnav">
             <a href="#market">Market</a>
             <a href="#basic">Basics</a>
@@ -66,11 +82,12 @@ export default function StockDetails() {
             <a href="#links">Links</a>
           </div>
 
+
           {stock.marketInformation && (
             <section className="section" id="market">
               <div className="heading-bar"><h4>Market Information</h4></div>
               <div className="card">
-                <p className="muted" style={{ textAlign: 'center' }}>As of: {fmtDate(stock.marketInformation.asOfDate)}</p>
+                <p className="muted" style={{ textAlign: 'center' }}>As of: {fmtDateOrDash(stock.marketInformation.asOfDate)}</p>
                 <div className="grid-two">
                   <table className="table classic">
                     <tbody>
@@ -84,8 +101,8 @@ export default function StockDetails() {
                   </table>
                   <table className="table classic">
                     <tbody>
-                      <tr><th>Day's Range</th><td>{fmtNum(stock.marketInformation.daysRange?.low)} - {fmtNum(stock.marketInformation.daysRange?.high)}</td></tr>
-                      <tr><th>52W Range</th><td>{fmtNum(stock.marketInformation.fiftyTwoWeeksMovingRange?.low)} - {fmtNum(stock.marketInformation.fiftyTwoWeeksMovingRange?.high)}</td></tr>
+                      <tr><th>Day's Range</th><td>{fmtDateRange(stock.marketInformation.daysRange)}</td></tr>
+                      <tr><th>52W Range</th><td>{fmtDateRange(stock.marketInformation.fiftyTwoWeeksMovingRange)}</td></tr>
                       <tr><th>Day's Volume</th><td>{fmtNum(stock.marketInformation.daysVolume)}</td></tr>
                       <tr><th>Day's Trades</th><td>{fmtNum(stock.marketInformation.daysTradeCount)}</td></tr>
                       <tr><th>Day's Value</th><td>{fmtNum(stock.marketInformation.daysValue)}</td></tr>
@@ -109,7 +126,7 @@ export default function StockDetails() {
                     <tr><th>Total Outstanding Securities</th><td>{fmtNum(stock.basicInformation.totalOutstandingSecurities)}</td></tr>
                     <tr><th>Instrument</th><td>{stock.basicInformation.typeOfInstrument ?? '-'}</td></tr>
                     <tr><th>Market Lot</th><td>{fmtNum(stock.basicInformation.marketLot)}</td></tr>
-                    <tr><th>Listing Year</th><td>{fmtNum(stock.basicInformation.listingYear)}</td></tr>
+                    <tr><th>Listing Year</th><td>{fmtPlainYear(stock.basicInformation.listingYear)}</td></tr>
                     <tr><th>Market Category</th><td>{stock.basicInformation.marketCategory ?? '-'}</td></tr>
                     <tr><th>Electronic Share</th><td>{stock.basicInformation.isElectronicShare ? 'Y' : 'N'}</td></tr>
                   </tbody>
@@ -137,9 +154,9 @@ export default function StockDetails() {
                     {(stock.financialPerformance.interimEPS || []).length ? (
                       stock.financialPerformance.interimEPS.map((e, idx) => (
                         <tr key={idx}>
-                          <td>{fmtNum(e.year)}</td>
+                          <td>{fmtPlainYear(e.year)}</td>
                           <td>{e.period || '-'}</td>
-                          <td>{fmtDate(e.endingOn)}</td>
+                          <td>{fmtDateOrDash(e.endingOn)}</td>
                           <td>{fmtNum(e.basic)}</td>
                           <td>{fmtNum(e.diluted)}</td>
                         </tr>
@@ -160,7 +177,7 @@ export default function StockDetails() {
                     {(stock.financialPerformance.auditedEPS || []).length ? (
                       stock.financialPerformance.auditedEPS.map((a, idx) => (
                         <tr key={idx}>
-                          <td>{fmtNum(a.year)}</td>
+                          <td>{fmtPlainYear(a.year)}</td>
                           <td>{fmtNum(a.eps)}</td>
                         </tr>
                       ))
@@ -185,7 +202,7 @@ export default function StockDetails() {
             </section>
           )}
 
-          {/* {stock.corporateInformation && (
+          {stock.corporateInformation && (
             <section className="section" id="corporate">
               <div className="heading-bar"><h4>Corporate Information</h4></div>
               <div className="card">
@@ -207,9 +224,9 @@ export default function StockDetails() {
                 ) : null}
               </div>
             </section>
-          )} */}
+          )}
 
-          {/* {stock.links && (
+          {stock.links && (
             <section className="section" id="links">
               <div className="heading-bar"><h4>Links</h4></div>
               <div className="card">
@@ -219,7 +236,7 @@ export default function StockDetails() {
                 </ul>
               </div>
             </section>
-          )} */}
+          )}
         </div>
       )}
     </div>

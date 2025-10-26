@@ -116,25 +116,25 @@ export default function FilterPanel({ filterOptions, setFilterOptions, onExecute
         </div>
 
         <div className="form-card">
-          <div className="heading-bar"><h3>Basic Parameters</h3></div>
-          <div className="form-grid" style={{ gridTemplateColumns: 'repeat(2, minmax(160px, 1fr))', gap: '0.5rem' }}>
-            <div className="form-row">
-              <label>P/E Ratio (min)</label>
-              <input className="input" type="number" step="0.01" value={filterOptions.pe_min} onChange={(e) => update('pe_min', e.target.value)} />
-            </div>
-            <div className="form-row">
-              <label>P/E Ratio (max)</label>
-              <input className="input" type="number" step="0.01" value={filterOptions.pe_max} onChange={(e) => update('pe_max', e.target.value)} />
-            </div>
-            <div className="form-row">
-              <label>Dividend Yield (min)</label>
-              <input className="input" type="number" step="0.01" value={filterOptions.dividend_min} onChange={(e) => update('dividend_min', e.target.value)} />
-            </div>
-            <div className="form-row">
-              <label>Market Cap (min)</label>
-              <input className="input" type="number" step="1" value={filterOptions.market_cap_min} onChange={(e) => update('market_cap_min', e.target.value)} />
-            </div>
+          <div className="form-row">
+            <label>P/E Ratio (min)</label>
+            <input className="input" type="number" step="0.01" value={filterOptions.pe_min} onChange={(e) => update('pe_min', e.target.value)} />
           </div>
+          <div className="form-row">
+            <label>P/E Ratio (max)</label>
+            <input className="input" type="number" step="0.01" value={filterOptions.pe_max} onChange={(e) => update('pe_max', e.target.value)} />
+          </div>
+          <div className="form-row">
+            <label>Dividend Yield (min)</label>
+            <input className="input" type="number" step="0.01" value={filterOptions.dividend_min} onChange={(e) => update('dividend_min', e.target.value)} />
+          </div>
+          <div className="form-row">
+            <label>Market Cap (min)</label>
+            <input className="input" type="number" step="1" value={filterOptions.market_cap_min} onChange={(e) => update('market_cap_min', e.target.value)} />
+          </div>
+        </div>
+
+        <div className="form-card">
           <div className="heading-bar"><h3>Loan Filters</h3></div>
           <div className="form-grid" style={{ gridTemplateColumns: 'repeat(2, minmax(160px, 1fr))', gap: '0.5rem' }}>
             <div className="form-row">
@@ -155,10 +155,6 @@ export default function FilterPanel({ filterOptions, setFilterOptions, onExecute
             </div>
           </div>
         </div>
-
-        {/* <div className="form-card">
-          
-        </div> */}
 
         <div className="form-card">
           <div className="heading-bar"><h3>Shareholding (latest)</h3></div>
