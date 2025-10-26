@@ -132,9 +132,6 @@ export default function FilterPanel({ filterOptions, setFilterOptions, onExecute
             <label>Market Cap (min)</label>
             <input className="input" type="number" step="1" value={filterOptions.market_cap_min} onChange={(e) => update('market_cap_min', e.target.value)} />
           </div>
-        </div>
-
-        <div className="form-card">
           <div className="heading-bar"><h3>Loan Filters</h3></div>
           <div className="form-grid" style={{ gridTemplateColumns: 'repeat(2, minmax(160px, 1fr))', gap: '0.5rem' }}>
             <div className="form-row">
@@ -155,6 +152,10 @@ export default function FilterPanel({ filterOptions, setFilterOptions, onExecute
             </div>
           </div>
         </div>
+
+        {/* <div className="form-card">
+          
+        </div> */}
 
         <div className="form-card">
           <div className="heading-bar"><h3>Shareholding (latest)</h3></div>
